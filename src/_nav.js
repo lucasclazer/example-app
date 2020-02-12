@@ -36,11 +36,16 @@ export default {
     },
     {
       title: true,
-      name: "Components",
+      name: "New Records",
       wrapper: {
         element: "",
         attributes: {}
       }
+    },
+    {
+      name: "Register Book",
+      url: "/book/register",
+      icon: "icon-drop"
     }
   ]
 };

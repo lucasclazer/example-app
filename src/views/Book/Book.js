@@ -21,15 +21,18 @@ export default class Book extends Component {
     console.log("Route Params:" + this.props.match.params.id);
   }
 
-
-  goBack() {
-   
-  }
+  goBack() {}
 
   filterDataBooks() {
+
+    if (this.props.match.params.id == -1) {
+      return this.state.dataBooks;
+    }
+
     let result = this.state.dataBooks.filter(
       x => x.category.id == this.props.match.params.id
     );
+
     console.log("Filtrou: ", result);
     return result;
   }

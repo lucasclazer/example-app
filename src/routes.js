@@ -4,6 +4,7 @@ import React from "react";
 const Home = React.lazy(() => import("./views/Home/Home"));
 const Category = React.lazy(() => import("./views/Category/Category"));
 const Book = React.lazy(() => import("./views/Book/Book"));
+const FormBook = React.lazy(() => import("./components/FormBook/FormBook"));
 
 // https://github.com/ReactTraining/react-router/tree/master/packages/react-router-config
 const routes = [
@@ -11,7 +12,13 @@ const routes = [
   // { path: "/dashboard", name: "Dashboard", component: Dashboard },
   { path: "/home", name: "Home", component: Home },
   { path: "/categories", name: "Categories", component: Category },
-  { path: "/books/:id", exact: true, name: "Books", component: Book }
+  { path: "/books/:id", exact: true, name: "Books", component: Book },
+  {
+    path: "/book/register",
+    exact: true,
+    name: "New Books",
+    component: FormBook
+  }
 ];
 
 export default routes;
