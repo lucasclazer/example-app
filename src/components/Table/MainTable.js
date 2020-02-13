@@ -1,5 +1,6 @@
 import React, { Component } from "react";
-
+import { Link, Route } from "react-router-dom";
+import FormBook from "../FormBook/FormBook";
 export default class Home extends Component {
   constructor(props) {
     super(props);
@@ -23,11 +24,11 @@ export default class Home extends Component {
 
   onEdit(id) {
     console.log("Edit id: ", id);
-    let tempBooks = this.getBooks();
-    console.log("pegou os livros do storage: ", tempBooks);
-    let res = tempBooks.filter(x => x.id == id);
-    console.log("Busca livro por id:", res);
-    this.setState({ book: res });
+    // let tempBooks = this.getBooks();
+    // console.log("pegou os livros do storage: ", tempBooks);
+    // let res = tempBooks.filter(x => x.id == id);
+    // console.log("Busca livro por id:", res);
+    // this.setState({ book: res });
 
     console.log("Book setado: ", this.state.book);
   }
@@ -38,7 +39,7 @@ export default class Home extends Component {
     console.log("Edit id: ", id);
     let tempBooks = this.getBooks();
     console.log("pegou os livros do storage: ", tempBooks);
-    let res = tempBooks.filter(x => x.id != id);
+    let res = tempBooks.filter(x => x.id != id); // por enquanto excluí o registro,
 
     console.log("retorna array sem o livro:", res);
 
@@ -63,6 +64,7 @@ export default class Home extends Component {
                   onClick={() => this.props.sortBy("id", this.props.dataBooks)}
                 >
                   Id
+                <i className="fa fa-sort ml-2"></i>
                 </button>
               </th>
               <th>
@@ -83,7 +85,7 @@ export default class Home extends Component {
               </th>
               <th>
                 {" "}
-                <button className="btn btn-outline">Author </button>
+                <button className="btn btn-outline">Author</button>
               </th>
               <th>
                 {" "}
@@ -111,12 +113,14 @@ export default class Home extends Component {
                 <td>{row.category.name}</td>
                 <td>{row.createdDateUTC}</td>
                 <td>
-                  <button
+                  <Link
                     className="btn btn-warning mr-2"
-                    onClick={() => this.onEdit(row.id)}
+                    to={`/bookmanager/${row.id}`}
+                    // onClick={() => this.onEdit(row.id)}
                   >
                     <i className="fa fa-edit"></i>
-                  </button>
+                  </Link>
+
                   <button
                     className="btn btn-danger"
                     onClick={() => this.onDelete(row.id)}
@@ -128,6 +132,7 @@ export default class Home extends Component {
             ))}
           </tbody>
         </table>
+        <Route path="/bookmanager/:id" component={FormBook}></Route>
       </div>
     );
   }

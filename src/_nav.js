@@ -22,30 +22,30 @@ export default {
     {
       name: "Home",
       url: "/home",
-      icon: "icon-pencil"
+      icon: "fa fa-home"
     },
     {
       name: "Categories",
       url: "/categories",
-      icon: "icon-pencil"
+      icon: "fa fa-address-book"
     },
     {
-      name: "Books",
+      name: "List of Books",
       url: "/books/-1",
-      icon: "icon-drop"
+      icon: "fa fa-book"
     },
     {
       title: true,
-      name: "New Records",
+      name: "Manage Records",
       wrapper: {
         element: "",
         attributes: {}
       }
     },
     {
-      name: "Register Book",
-      url: "/book/register",
-      icon: "icon-drop"
+      name: "Books",
+      url: "/bookmanager/-1",
+      icon: "fa fa-book"
     }
   ]
 };

@@ -1,5 +1,7 @@
 import React, { Component } from "react";
 import MainTable from "../../components/Table/MainTable";
+import { Link, Route } from "react-router-dom";
+import FormBook from "../../components/FormBook/FormBook";
 
 export default class Book extends Component {
   constructor(props) {
@@ -24,7 +26,6 @@ export default class Book extends Component {
   goBack() {}
 
   filterDataBooks() {
-
     if (this.props.match.params.id == -1) {
       return this.state.dataBooks;
     }
@@ -37,27 +38,38 @@ export default class Book extends Component {
     return result;
   }
 
-  sortBy(key, array, direction) {
+  sortBy(key, array) {
     console.log("Sorted by!", key);
+    let dataBooksTemp;
+    console.log("Direction: ", this.state.direction);
+    if (this.state.direction) {
+      dataBooksTemp = array.sort((a, b) => a[key] < b[key]);
+    } else {
+      dataBooksTemp = array.sort((a, b) => a[key] > b[key]);
+    }
+
+    this.setState({ direction: !this.state.direction });
     this.setState({
-      dataBooks: array.sort((a, b) => a[key] < b[key])
+      dataBooks: dataBooksTemp
     });
     console.log("Sort result: ", this.dataBooks);
   }
+
   render() {
     return (
       <div className="animated fadeIn">
         <div className="d-flex mb-3">
-          <button className="btn btn-primary shadow" onClick={this.goBack}>
+          <Link className="btn btn-primary shadow" to={`/bookmanager/${-1}`}>
             Adicionar
-          </button>
-          <button className="btn btn-danger ml-auto shadow">Voltar</button>
+          </Link>
+          {/* <button className="btn btn-danger ml-auto shadow">Voltar</button> */}
         </div>
         <MainTable
           dataCategories={this.state.dataCategories}
           dataBooks={this.filterDataBooks()}
           sortBy={this.sortBy}
         ></MainTable>
+        <Route path="/bookmanager/:id" component={FormBook}></Route>
       </div>
     );
   }

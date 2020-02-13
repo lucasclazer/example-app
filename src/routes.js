@@ -14,9 +14,9 @@ const routes = [
   { path: "/categories", name: "Categories", component: Category },
   { path: "/books/:id", exact: true, name: "Books", component: Book },
   {
-    path: "/book/register",
+    path: "/bookmanager/:id",
     exact: true,
-    name: "New Books",
+    name: "Book Manager",
     component: FormBook
   }
 ];

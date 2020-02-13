@@ -10,8 +10,21 @@ import * as serviceWorker from "./serviceWorker";
 import categories from "./data/categories";
 import books from "./data/books";
 
-localStorage.setItem("categories", JSON.stringify(categories));
-localStorage.setItem("books", JSON.stringify(books));
+if (
+  !localStorage.getItem("categories") ||
+  localStorage.getItem("categories").length <= 0
+) {
+  console.log("inicializa as categorias");
+  localStorage.setItem("categories", JSON.stringify(categories));
+}
+
+if (
+  !localStorage.getItem("books") ||
+  localStorage.getItem("books").length <= 0
+) {
+  console.log("Inicializa os livros");
+  localStorage.setItem("books", JSON.stringify(books));
+}
 
 ReactDOM.render(<App />, document.getElementById("root"));
 

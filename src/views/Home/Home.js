@@ -13,10 +13,6 @@ export default class Home extends Component {
     this.sortBy = this.sortBy.bind(this);
   }
 
-  //         <MainTable
-  //     dataCategories={this.getCategories()}
-  //     dataBooks={this.getBooks()}
-  // />
   sortBy(key, array) {
     console.log("Sorted by!", key);
     let dataBooksTemp;
