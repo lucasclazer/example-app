@@ -21,6 +21,7 @@ export default class FormBook extends React.Component {
   }
 
   componentDidMount() {
+    this.forceUpdate();
     if (this.props.match.params.id >= 0) {
       console.log("Inicializa edição!");
 
@@ -60,56 +61,36 @@ export default class FormBook extends React.Component {
   }
 
   EditBook() {
-    var tempId = this.props.match.params.id;
-    console.log("Id par editar: ", tempId);
+    console.log("Id par editar: ", this.state.id);
     console.log(
       "Livro para editar: ",
-      this.state.books.find(x => x.id == tempId)
+      this.state.books.find(x => x.id == this.state.id)
     );
 
-    // this.setState({
-    //   book: this.state.books.find(x => x.id == tempId)
-    // });
-this.state.books[this.state.books.indexOf(this.state.id)] = this.state.book; 
-    this.setState({ });
+    var tempBooks = this.state.books;
+    var index = tempBooks.findIndex(x => x.id == this.state.id);
+    console.log("IndexOf, ", index);
 
+    tempBooks[index].title = this.state.title;
+    tempBooks[index].author = this.state.author;
+    tempBooks[index].category = this.state.category;
+
+    this.setState({ books: tempBooks });
+    console.log("Vetor de livros Alterado!, ", this.state.books);
     localStorage.setItem("books", JSON.stringify(this.state.books));
   }
 
   SaveBook() {
-    // var temp;
-    // var tempId;
 
     console.log("Id Route: ", this.props.match.params.id);
     console.log("Livros: ", this.state.books);
 
     if (this.props.match.params.id <= -1) {
       this.AddBook();
-      // temp = this.state.books.sort((a, c) => a["id"] < c["id"]);
-      // tempId = temp[0].id + 1;
     } else {
       this.EditBook();
     }
 
-    // console.log("state: ", this.state);
-
-    // let date = Date.now();
-
-    // var book = {
-    //   id: tempId,
-    //   createdDate: date,
-    //   createdDateUTC: date.toLocaleString(),
-    //   title: this.state.title,
-    //   author: this.state.author,
-    //   category: this.state.categories[this.state.category],
-    //   deleted: false
-    // };
-
-    // console.log("Objecto para gravar: ", book);
-
-    // this.state.books.push(book);
-    // console.log("State: ", this.state);
-    // localStorage.setItem("books", JSON.stringify(this.state.books));
   }
 
   Buttons(props) {
@@ -196,7 +177,7 @@ this.state.books[this.state.books.indexOf(this.state.id)] = this.state.book;
                   name="category"
                   className="custom-select"
                   onChange={event => this.handleChange(event)}
-                  defaultValue={this.state.category}
+                  // defaultValue={this.state.category}
                   value={this.state.category}
                 >
                   <option value="0">Without Category</option>

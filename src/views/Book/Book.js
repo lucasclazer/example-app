@@ -11,10 +11,9 @@ export default class Book extends Component {
       dataCategories: JSON.parse(localStorage.getItem("categories")),
       dataBooks: JSON.parse(localStorage.getItem("books"))
     };
-    this.goBack = this.goBack.bind(this);
-
     this.filterDataBooks = this.filterDataBooks.bind(this);
     this.sortBy = this.sortBy.bind(this);
+    this.deleteBook = this.deleteBook.bind(this);
   }
 
   componentWillMount() {
@@ -22,8 +21,6 @@ export default class Book extends Component {
     console.log("Books Props:", this.props);
     console.log("Route Params:" + this.props.match.params.id);
   }
-
-  goBack() {}
 
   filterDataBooks() {
     if (this.props.match.params.id == -1) {
@@ -36,6 +33,19 @@ export default class Book extends Component {
 
     console.log("Filtrou: ", result);
     return result;
+  }
+
+  setBooks(array) {
+    localStorage.setItem("books", JSON.stringify(array));
+  }
+
+  deleteBook(id) {
+    console.log("Delete id: ", id);
+    console.log("Array antes da deleção: ", this.state.dataBooks);
+    let res = this.state.dataBooks.filter(x => x.id != id); // por enquanto excluí o registro,
+    console.log("retorna array sem o livro:", res);
+    this.setState({ dataBooks: res });
+    this.setBooks(res);
   }
 
   sortBy(key, array) {
@@ -62,12 +72,12 @@ export default class Book extends Component {
           <Link className="btn btn-primary shadow" to={`/bookmanager/${-1}`}>
             Adicionar
           </Link>
-          {/* <button className="btn btn-danger ml-auto shadow">Voltar</button> */}
         </div>
         <MainTable
           dataCategories={this.state.dataCategories}
           dataBooks={this.filterDataBooks()}
           sortBy={this.sortBy}
+          deleteBook={this.deleteBook}
         ></MainTable>
         <Route path="/bookmanager/:id" component={FormBook}></Route>
       </div>

@@ -19,13 +19,6 @@ export default class Home extends Component {
     return JSON.parse(localStorage.getItem("books"));
   }
 
-  // setBookRoute(id) {
-  //   this.setState({
-  //   bookRouteId: id
-  //   })
-
-  // }
-
   render(props) {
     console.log("Data Categories: ", this.props.dataCategories);
     console.log("Data books: ", this.props.dataBooks);

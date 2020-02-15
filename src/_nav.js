@@ -46,11 +46,6 @@ export default {
       name: "Books",
       url: "/bookmanager/-1",
       icon: "fa fa-book"
-    },
-    {
-      name: "Book Edit",
-      url: "/bookedit",
-      icon: "fa fa-book"
     }
   ]
 };
