@@ -5,69 +5,122 @@ export default class FormBook extends React.Component {
     super(props);
 
     this.state = {
+      books: JSON.parse(localStorage.getItem("books")),
+      categories: JSON.parse(localStorage.getItem("categories")),
       bookId: -1,
       category: 0,
       id: -100,
       title: "",
-      author: "a",
-      deleted: false,
-      book: {}
-      // books: JSON.parse(localStorage.getItem("books")),
-      // categories: JSON.parse(localStorage.getItem("categories")),
+      author: "",
+      book: {},
+      action: false
     };
 
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
-    // this.SaveBook = this.SaveBook.bind(this);
-    // this.state.books = this.state.books.bind(this);
   }
 
-  getBook() {
-    this.state.books.filter(x => x.id == this.bookId);
-  }
+  componentDidMount() {
+    if (this.props.match.params.id >= 0) {
+      console.log("Inicializa edição!");
 
-  SaveBook() {
-    if (this.props.action) {
-      return;
+      var bookTemp = this.state.books.find(
+        x => x.id == this.props.match.params.id
+      );
+      console.log("Livro para edição encontrado!, ", bookTemp);
+      this.setState({
+        action: true,
+        id: bookTemp.id,
+        title: bookTemp.title,
+        author: bookTemp.author,
+        category: bookTemp.category.id
+      });
     }
-    console.log("state: ", this.state);
+  }
 
-    let temp = this.state.books.sort((a, b) => a["id"] < b["id"]);
-    let lastId = temp[0].id + 1;
+  AddBook() {
     let date = Date.now();
+    let temp = this.state.books.sort((a, c) => a["id"] < c["id"]);
+    let tempId = temp[0].id + 1;
 
-    this.setState({
-      book: {
-        id: lastId,
-        createdDate: date,
-        createdDateUTC: date.toLocaleString(),
-        title: this.state.title,
-        author: this.state.author,
-        category: this.state.categories[this.state.category],
-        deleted: false
-      }
-    });
+    var book = {
+      id: tempId,
+      createdDate: date,
+      createdDateUTC: date.toLocaleString(),
+      title: this.state.title,
+      author: this.state.author,
+      category: this.state.categories[this.state.category],
+      deleted: false
+    };
 
-    console.log("Livro para inserir: ", this.state.book);
+    console.log("Objecto para gravar: ", book);
+    this.state.books.push(book);
+    console.log("State: ", this.state);
+    localStorage.setItem("books", JSON.stringify(this.state.books));
+  }
 
-    this.state.books.push(this.state.book);
+  EditBook() {
+    var tempId = this.props.match.params.id;
+    console.log("Id par editar: ", tempId);
+    console.log(
+      "Livro para editar: ",
+      this.state.books.find(x => x.id == tempId)
+    );
+
+    // this.setState({
+    //   book: this.state.books.find(x => x.id == tempId)
+    // });
+this.state.books[this.state.books.indexOf(this.state.id)] = this.state.book; 
+    this.setState({ });
 
     localStorage.setItem("books", JSON.stringify(this.state.books));
   }
 
+  SaveBook() {
+    // var temp;
+    // var tempId;
+
+    console.log("Id Route: ", this.props.match.params.id);
+    console.log("Livros: ", this.state.books);
+
+    if (this.props.match.params.id <= -1) {
+      this.AddBook();
+      // temp = this.state.books.sort((a, c) => a["id"] < c["id"]);
+      // tempId = temp[0].id + 1;
+    } else {
+      this.EditBook();
+    }
+
+    // console.log("state: ", this.state);
+
+    // let date = Date.now();
+
+    // var book = {
+    //   id: tempId,
+    //   createdDate: date,
+    //   createdDateUTC: date.toLocaleString(),
+    //   title: this.state.title,
+    //   author: this.state.author,
+    //   category: this.state.categories[this.state.category],
+    //   deleted: false
+    // };
+
+    // console.log("Objecto para gravar: ", book);
+
+    // this.state.books.push(book);
+    // console.log("State: ", this.state);
+    // localStorage.setItem("books", JSON.stringify(this.state.books));
+  }
+
   Buttons(props) {
-    if (this.props.action) {
+    if (this.state.action) {
       return (
-        <div>
-          <button
-            className="btn btn-primary"
-            type="submit"
-            onClick={() => this.SaveBook()}
-          >
-            Edit
-          </button>
+        <div className="d-flex">
           <button className="btn btn-primary" type="submit">
             Edit
+          </button>
+          <button className="btn btn-danger ml-auto" type="reset">
+            Cancel
           </button>
         </div>
       );
@@ -75,11 +128,7 @@ export default class FormBook extends React.Component {
 
     return (
       <div className="d-flex">
-        <button
-          className="btn btn-primary"
-          type="submit"
-          // onClick={() => }
-        >
+        <button className="btn btn-primary" type="submit">
           Add
         </button>
         <button className="btn btn-danger ml-auto" type="reset">
@@ -90,7 +139,7 @@ export default class FormBook extends React.Component {
   }
 
   Header(props) {
-    if (this.props.action) {
+    if (this.state.action) {
       return (
         <div>
           <h5 className="card-title">Edit your Book</h5>
@@ -107,12 +156,8 @@ export default class FormBook extends React.Component {
   }
 
   handleChange(e) {
-    // console.log("Evento", e);
-    const value = e.target.value;
-    console.log("value", e.target);
+    console.log("[e.target.name]: ", [e.target.name]);
     this.setState({ [e.target.name]: e.target.value });
-
-    // console.log("State Event: ", this.state);
   }
 
   handleSubmit(event) {
@@ -130,27 +175,29 @@ export default class FormBook extends React.Component {
               <div className="form-group">
                 <label>Title</label>
                 <input
+                  name="title"
                   className="form-control"
                   type="text"
                   required
-                  // value={this.state.title}
-                  // onChange={this.handleChange.bind(this)}
+                  value={this.state.title}
+                  onChange={event => this.handleChange(event)}
                 />
                 <label>Author</label>
                 <input
+                  name="author"
                   className="form-control"
                   type="text"
                   required
-                  onChange={() => this.handleChange}
+                  onChange={event => this.handleChange(event)}
                   value={this.state.author}
                 />
-                <label htmlFor="my-select">Category</label>
+                <label htmlFor="category">Category</label>
                 <select
-                  id="my-select"
+                  name="category"
                   className="custom-select"
-                  // onChange={this.handleChange}
-                  // // defaultValue={this.state.category}
-                  // value={this.state.category}
+                  onChange={event => this.handleChange(event)}
+                  defaultValue={this.state.category}
+                  value={this.state.category}
                 >
                   <option value="0">Without Category</option>
                   <option value="1">reading - Currently Reading</option>
